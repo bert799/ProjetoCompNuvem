@@ -1,7 +1,7 @@
 resource "aws_instance" "app_server" {
-  ami = var.image_id
-  ### AMI diferem aws e ubuntu
-  instance_type = var.host_type
+  for_each = var.instance_vars
+  ami = each.value.image_id
+  instance_type = each.value.host_type
   
   network_interface {
     network_interface_id = aws_network_interface.foo.id
@@ -9,6 +9,6 @@ resource "aws_instance" "app_server" {
   }
   
   tags = {
-    Name = var.image_tag
+    Name = each.value.image_name
   }
 }
