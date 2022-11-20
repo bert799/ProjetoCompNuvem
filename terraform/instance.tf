@@ -4,7 +4,7 @@ resource "aws_instance" "app_server" {
   instance_type   = each.value.host_type
   
   subnet_id       = aws_subnet.subnet_projeto.id
-  security_groups = [each.value.security_group_id != "" ? each.value.security_group_id : aws_security_group.default_sec_group.id]
+  vpc_security_group_ids = [aws_security_group.custom_sec_group[lookup(var.security_group_vars, each.value.security_group_name, null).name].id]
 
   tags = {
     Name          = each.value.image_name

@@ -1,0 +1,42 @@
+{
+    "instance_vars": {
+        "instance_1" :{
+            "image_id" : "ami-08c40ec9ead489470",
+            "host_type" : "t2.micro",
+            "image_name": "bert-test1",
+            "security_group_name" : "test_sec_1"
+        },
+        "instance_2" :{
+            "image_id" : "ami-0149b2da6ceec4bb0",
+            "host_type" : "t2.nano",
+            "image_name": "bert-test2",
+            "security_group_name" : "test_sec_2"
+        }
+        
+    },
+
+    "security_group_vars" : {
+        "test_sec_1" :{
+            "name" : "test_sec_1",
+            "ingress": {
+                "description" : "default",
+                "from_port"   : 443,
+                "to_port"     : 443,
+                "protocol"    : "tcp",
+                "cidr_blocks" : ["0.0.0.0/0"],
+                "ipv6_cidr_blocks" : []
+            }
+        },
+        "test_sec_2" :{
+            "name" : "test_sec_2",
+            "ingress" : {
+                "description" : "default",
+                "from_port"   : 443,
+                "to_port"     : 443,
+                "protocol"    : "tcp",
+                "cidr_blocks" : ["0.0.0.0/0"],
+                "ipv6_cidr_blocks" : []
+            }
+        }
+    }
+}

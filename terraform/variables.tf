@@ -4,7 +4,7 @@ variable "instance_vars"{
       image_id = string,
       host_type = string,
       image_name = string,
-      security_group_id = string
+      security_group_name = string
     })
   )
 }
@@ -14,10 +14,12 @@ variable "security_group_vars"{
     object({
       name = string,
       ingress = object({
+        description      = string,
         from_port        = number,
         to_port          = number,  
         protocol         = string,
-        cidr_blocks      = list(string)
+        cidr_blocks      = list(string),
+        ipv6_cidr_blocks = list(string)
       })
     })
   )
