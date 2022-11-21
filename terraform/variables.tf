@@ -24,3 +24,12 @@ variable "security_group_vars"{
     })
   )
 }
+
+variable "user_vars"{
+  type = map (
+    object({
+      name = string,
+      reset_password = bool,
+      user_policy = string
+  }))
+}
