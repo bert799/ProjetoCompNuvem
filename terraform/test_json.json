@@ -20,8 +20,8 @@
             "name" : "test_sec_1",
             "ingress": {
                 "description" : "default",
-                "from_port"   : 443,
-                "to_port"     : 443,
+                "from_port"   : 22,
+                "to_port"     : 22,
                 "protocol"    : "tcp",
                 "cidr_blocks" : ["0.0.0.0/0"],
                 "ipv6_cidr_blocks" : []
@@ -31,12 +31,36 @@
             "name" : "test_sec_2",
             "ingress" : {
                 "description" : "default",
-                "from_port"   : 443,
-                "to_port"     : 443,
+                "from_port"   : 22,
+                "to_port"     : 22,
                 "protocol"    : "tcp",
                 "cidr_blocks" : ["0.0.0.0/0"],
                 "ipv6_cidr_blocks" : []
             }
+        }
+    },
+
+    "user_vars" : {},
+
+    "security_group_rule_vars" : {
+        "rule_change1": {
+            "type" : "ingress",
+            "from_port"   : 22,
+            "to_port"     : 22,
+            "protocol"    : "tcp",
+            "cidr_blocks" : ["0.0.0.0/0"],
+            "ipv6_cidr_blocks" : [],
+            "security_group_name" : "test_sec_1"
+        },
+
+        "rule_change2": {
+            "type" : "ingress",
+            "from_port"   : 22,
+            "to_port"     : 22,
+            "protocol"    : "tcp",
+            "cidr_blocks" : ["0.0.0.0/0"],
+            "ipv6_cidr_blocks" : [],
+            "security_group_name" : "test_sec_2"
         }
     }
 }

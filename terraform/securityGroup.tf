@@ -41,3 +41,14 @@ resource "aws_security_group" "custom_sec_group" {
         Name    = "custom_bernie"
     }
 }
+
+resource "aws_security_group_rule" "add_rule" {
+    for_each = var.security_group_rule_vars
+    type              = each.value.type
+    from_port         = each.value.from_port
+    to_port           = each.value.to_port
+    protocol          = each.value.protocol
+    cidr_blocks       = each.value.cidr_blocks
+    ipv6_cidr_blocks  = each.value.ipv6_cidr_blocks
+    security_group_id = aws_security_group.custom_sec_group[lookup(var.security_group_vars, each.value.security_group_name, null).name].id
+}
