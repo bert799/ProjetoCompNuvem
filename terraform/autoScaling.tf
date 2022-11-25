@@ -14,7 +14,7 @@ resource "aws_launch_configuration" "terramino" {
   instance_type   = "t2.micro"
   user_data       = file("user-data.sh")
   security_groups = [aws_security_group.terramino_instance.id]
-  key_name = "test-bernardo"
+  key_name = "bernardo"
 
   lifecycle {
     create_before_destroy = true
@@ -28,6 +28,10 @@ resource "aws_autoscaling_group" "terramino" {
   desired_capacity     = 1
   launch_configuration = aws_launch_configuration.terramino.name
   vpc_zone_identifier  = aws_subnet.subnet_asg.*.id
+
+  lifecycle { 
+    ignore_changes = [desired_capacity, target_group_arns]
+  }
 
   tag {
     key                 = "Name"
