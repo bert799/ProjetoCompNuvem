@@ -1,18 +1,7 @@
-data "aws_ami" "amazon-linux" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn-ami-hvm-*-x86_64-ebs"]
-  }
-}
-
 resource "aws_launch_configuration" "terramino" {
   name_prefix     = "bernardo-asg-"
-  image_id        = data.aws_ami.amazon-linux.id
+  image_id        = "ami-0748e8a272c4ae3ef"
   instance_type   = "t2.micro"
-  user_data       = file("user-data.sh")
   security_groups = [aws_security_group.terramino_instance.id]
   key_name = "bernardo"
 
@@ -61,7 +50,7 @@ resource "aws_lb_listener" "terramino" {
 
 resource "aws_lb_target_group" "terramino" {
   name     = "learn-asg-terramino"
-  port     = 80
+  port     = 8080
   protocol = "HTTP"
   vpc_id   = aws_vpc.vpc_projeto.id
 }
@@ -75,10 +64,31 @@ resource "aws_autoscaling_attachment" "terramino" {
 resource "aws_security_group" "terramino_instance" {
   name = "learn-asg-terramino-instance"
   ingress {
+    from_port       = 8080
+    to_port         = 8080
+    protocol        = "tcp"
+    security_groups = [aws_security_group.terramino_lb.id]
+  }
+
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
-    security_groups = [aws_security_group.terramino_lb.id]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
