@@ -29,14 +29,6 @@ resource "aws_security_group" "custom_sec_group" {
     name        = each.value.name
     vpc_id      = aws_vpc.vpc_projeto.id
 
-    ingress {
-        description      = each.value.ingress.description
-        from_port        = each.value.ingress.from_port
-        to_port          = each.value.ingress.to_port
-        protocol         = each.value.ingress.protocol
-        cidr_blocks      = each.value.ingress.cidr_blocks
-        ipv6_cidr_blocks = each.value.ingress.ipv6_cidr_blocks
-    }
     tags = {
         Name    = "custom_bernie"
     }

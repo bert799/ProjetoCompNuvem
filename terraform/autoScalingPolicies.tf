@@ -1,15 +1,17 @@
 resource "aws_autoscaling_policy" "scale_down" {
-  name                   = "terramino_scale_down"
-  autoscaling_group_name = aws_autoscaling_group.terramino.name
+  count = var.create_HA_infrastructure ? 1 : 0
+  name                   = "web_service_scale_down"
+  autoscaling_group_name = aws_autoscaling_group.web_service[count.index].name
   adjustment_type        = "ChangeInCapacity"
   scaling_adjustment     = -1
   cooldown               = 120
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_down" {
-  alarm_description   = "Monitors CPU utilization for Terramino ASG"
-  alarm_actions       = [aws_autoscaling_policy.scale_down.arn]
-  alarm_name          = "terramino_scale_down"
+  count = var.create_HA_infrastructure ? 1 : 0
+  alarm_description   = "Monitors CPU utilization for web_service ASG"
+  alarm_actions       = [aws_autoscaling_policy.scale_down[count.index].arn]
+  alarm_name          = "web_service_scale_down"
   comparison_operator = "LessThanOrEqualToThreshold"
   namespace           = "AWS/EC2"
   metric_name         = "CPUUtilization"
@@ -19,22 +21,24 @@ resource "aws_cloudwatch_metric_alarm" "scale_down" {
   statistic           = "Average"
 
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.terramino.name
+    AutoScalingGroupName = aws_autoscaling_group.web_service[count.index].name
   }
 }
 
 resource "aws_autoscaling_policy" "scale_up" {
-  name                   = "terramino_scale_up"
-  autoscaling_group_name = aws_autoscaling_group.terramino.name
+  count = var.create_HA_infrastructure ? 1 : 0
+  name                   = "web_service_scale_up"
+  autoscaling_group_name = aws_autoscaling_group.web_service[count.index].name
   adjustment_type        = "ChangeInCapacity"
   scaling_adjustment     = 1
   cooldown               = 120
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up" {
-  alarm_description   = "Monitors CPU utilization for Terramino ASG"
-  alarm_actions       = [aws_autoscaling_policy.scale_up.arn]
-  alarm_name          = "terramino_scale_up"
+  count = var.create_HA_infrastructure ? 1 : 0
+  alarm_description   = "Monitors CPU utilization for web_service ASG"
+  alarm_actions       = [aws_autoscaling_policy.scale_up[count.index].arn]
+  alarm_name          = "web_service_scale_up"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   namespace           = "AWS/EC2"
   metric_name         = "CPUUtilization"
@@ -44,6 +48,6 @@ resource "aws_cloudwatch_metric_alarm" "scale_up" {
   statistic           = "Average"
 
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.terramino.name
+    AutoScalingGroupName = aws_autoscaling_group.web_service[count.index].name
   }
 }

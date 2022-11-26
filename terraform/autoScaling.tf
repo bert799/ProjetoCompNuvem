@@ -1,8 +1,9 @@
-resource "aws_launch_configuration" "terramino" {
+resource "aws_launch_configuration" "web_service" {
+  count = var.create_HA_infrastructure ? 1 : 0
   name_prefix     = "bernardo-asg-"
   image_id        = "ami-0748e8a272c4ae3ef"
   instance_type   = "t2.micro"
-  security_groups = [aws_security_group.terramino_instance.id]
+  security_groups = [aws_security_group.web_service_instance[count.index].id]
   key_name = "bernardo"
 
   lifecycle {
@@ -10,12 +11,13 @@ resource "aws_launch_configuration" "terramino" {
   }
 }
 
-resource "aws_autoscaling_group" "terramino" {
-  name                 = "terramino"
+resource "aws_autoscaling_group" "web_service" {
+  count = var.create_HA_infrastructure ? 1 : 0
+  name                 = "web-service"
   min_size             = 1
   max_size             = 3
   desired_capacity     = 1
-  launch_configuration = aws_launch_configuration.terramino.name
+  launch_configuration = aws_launch_configuration.web_service[count.index].name
   vpc_zone_identifier  = aws_subnet.subnet_asg.*.id
 
   lifecycle { 
@@ -24,50 +26,55 @@ resource "aws_autoscaling_group" "terramino" {
 
   tag {
     key                 = "Name"
-    value               = "HashiCorp Learn ASG - Terramino"
+    value               = "HA-Instance-Bernardo"
     propagate_at_launch = true
   }
 }
 
-resource "aws_lb" "terramino" {
-  name               = "learn-asg-terramino-lb"
+resource "aws_lb" "web_service" {
+  count = var.create_HA_infrastructure ? 1 : 0
+  name               = "bernardo-lb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.terramino_lb.id]
+  security_groups    = [aws_security_group.web_service_lb[count.index].id]
   subnets            = aws_subnet.subnet_asg.*.id
 }
 
-resource "aws_lb_listener" "terramino" {
-  load_balancer_arn = aws_lb.terramino.arn
+resource "aws_lb_listener" "web_service" {
+  count = var.create_HA_infrastructure ? 1 : 0
+  load_balancer_arn = aws_lb.web_service[count.index].arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.terramino.arn
+    target_group_arn = aws_lb_target_group.web_service[count.index].arn
   }
 }
 
-resource "aws_lb_target_group" "terramino" {
-  name     = "learn-asg-terramino"
+resource "aws_lb_target_group" "web_service" {
+  count = var.create_HA_infrastructure ? 1 : 0
+  name     = "asg-web-service"
   port     = 8080
   protocol = "HTTP"
   vpc_id   = aws_vpc.vpc_projeto.id
 }
 
 
-resource "aws_autoscaling_attachment" "terramino" {
-  autoscaling_group_name = aws_autoscaling_group.terramino.id
-  alb_target_group_arn   = aws_lb_target_group.terramino.arn
+resource "aws_autoscaling_attachment" "web_service" {
+  count = var.create_HA_infrastructure ? 1 : 0
+  autoscaling_group_name = aws_autoscaling_group.web_service[count.index].id
+  alb_target_group_arn   = aws_lb_target_group.web_service[count.index].arn
 }
 
-resource "aws_security_group" "terramino_instance" {
-  name = "learn-asg-terramino-instance"
+resource "aws_security_group" "web_service_instance" {
+  count = var.create_HA_infrastructure ? 1 : 0
+  name = "HA-sg-instance-bernardo"
   ingress {
     from_port       = 8080
     to_port         = 8080
     protocol        = "tcp"
-    security_groups = [aws_security_group.terramino_lb.id]
+    security_groups = [aws_security_group.web_service_lb[count.index].id]
   }
 
   ingress {
@@ -95,14 +102,15 @@ resource "aws_security_group" "terramino_instance" {
     from_port       = 0
     to_port         = 0
     protocol        = "-1"
-    security_groups = [aws_security_group.terramino_lb.id]
+    security_groups = [aws_security_group.web_service_lb[count.index].id]
   }
 
   vpc_id = aws_vpc.vpc_projeto.id
 }
 
-resource "aws_security_group" "terramino_lb" {
-  name = "learn-asg-terramino-lb"
+resource "aws_security_group" "web_service_lb" {
+  count = var.create_HA_infrastructure ? 1 : 0
+  name = "lb-sg-Bernardo"
   ingress {
     from_port   = 80
     to_port     = 80
