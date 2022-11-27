@@ -9,22 +9,6 @@ variable "instance_vars"{
   )
 }
 
-variable "security_group_vars"{
-  type = map (
-    object({
-      name = string,
-      ingress = object({
-        description      = string,
-        from_port        = number,
-        to_port          = number,  
-        protocol         = string,
-        cidr_blocks      = list(string),
-        ipv6_cidr_blocks = list(string)
-      })
-    })
-  )
-}
-
 variable "user_vars"{
   type = map (
     object({
@@ -32,6 +16,14 @@ variable "user_vars"{
       reset_password = bool,
       user_policy = string
   }))
+}
+
+variable "security_group_vars"{
+  type = map (
+    object({
+      name = string
+    })
+  )
 }
 
 variable "security_group_rule_vars"{
@@ -46,4 +38,8 @@ variable "security_group_rule_vars"{
       security_group_name = string
     })
   )
+}
+
+variable "create_HA_infrastructure" {
+  type = bool
 }

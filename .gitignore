@@ -30,3 +30,9 @@ override.tf.json
 
 env/
 aws/
+
+__pycache__/
+
+json 
+os
+test.py

@@ -67,8 +67,3 @@ resource "aws_iam_user_policy" "user_policy_bernardo" {
     # Terraform expression result to valid JSON syntax.
     policy = lookup(local.policies, each.value.user_policy, local.policies.policy_read_only).policy
 }
-
-output "password" {
-    value = [for password in aws_iam_user_login_profile.login_bernardo : password]
-}
-
