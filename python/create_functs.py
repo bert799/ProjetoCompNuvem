@@ -1,6 +1,7 @@
 import classes
 import time
 import general_functs
+import pprint
 import globals
 
 def create_infrastructure():
@@ -76,7 +77,12 @@ def create_security_group():
 def create_security_group_rule(name = ""):
     general_functs.clear_terminal()
     if name == "":
-        name = input('Insert the name of the security group you would like to add a rule to: ')
+        data = general_functs.read_json()
+        sec_groups = data['security_group_vars']
+        print('Security Groups in region:\n')
+        for sg in list(sec_groups.keys()):
+            print(sg)
+        name = input('\nInsert the name of the security group you would like to add a rule to: ')
     general_functs.clear_terminal()
     add_rule = input('Would you like to add a rule to your security group y/n: ')
     while(add_rule.lower() == 'y'):
