@@ -7,6 +7,8 @@ from projeto import ami_dict, host_types_list, user_policies
 def create_infrastructure():
     while(True):
         print('''
+        Choose what to create:
+        
         1: Instance
         2: Security Group
         3: Security Group rule

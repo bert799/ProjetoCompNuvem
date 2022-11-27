@@ -1,7 +1,7 @@
 resource "aws_launch_configuration" "web_service" {
   count = var.create_HA_infrastructure ? 1 : 0
   name_prefix     = "bernardo-asg-"
-  image_id        = "ami-0748e8a272c4ae3ef"
+  image_id        = "	ami-0e291adf79e91660a"
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.web_service_instance[count.index].id]
   key_name = "bernardo"
