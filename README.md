@@ -20,7 +20,7 @@ O programa foi codado e testado no sistema operacional **Ubuntu 22.04.1**, é re
 <br/>
 
 ### Terraform:
-É preciso que o programa de *Infrastructure as Code* (IaC) **Terraform** versão 4.1.6 ou acima esteja instalado em seu sistema. 
+É preciso que o programa de *Infrastructure as Code* (IaC) **Terraform** versão 1.3.5 ou acima esteja instalado em seu sistema. 
 
 Para instalar siga o [tutorial](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) no site da HashiCorp
 
