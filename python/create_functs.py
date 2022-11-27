@@ -1,12 +1,13 @@
 import classes
 import time
-from general_functs import *
-from projeto import ami_dict, host_types_list, user_policies
-
+import general_functs
+import globals
 
 def create_infrastructure():
+    general_functs.clear_terminal()
     while(True):
-        print('''
+        print(f'''        Current Region:{globals.region}
+
         Choose what to create:
         
         1: Instance
@@ -32,26 +33,26 @@ def create_infrastructure():
             return None        
         else:
             input('Invalid option, press any key to continue.')
-            clear_terminal()
-        clear_terminal()
+            general_functs.clear_terminal()
+        general_functs.clear_terminal()
 
 def create_instance():
-    clear_terminal()
+    general_functs.clear_terminal()
     i = 1
-    for name, ami in ami_dict[current_region].items():
+    for name, ami in globals.ami_dict[globals.region].items():
         print(f'        {i}: Name: {name} | ami:{ami}')
         i += 1
     ami_selected = int(input('Please, select one of the above images for your instance: '))
-    image_id = list(ami_dict[current_region].values())[ami_selected]
-    clear_terminal()
+    image_id = list(globals.ami_dict[globals.region].values())[ami_selected-1]
+    general_functs.clear_terminal()
     print('''
         1: t2.nano
         2: t2.micro
     ''')
-    type = host_types_list[int(input('Please, select the type of your instance from on of the above: '))-1]
-    clear_terminal()
+    type = globals.host_types_list[int(input('Please, select the type of your instance from on of the above: '))-1]
+    general_functs.clear_terminal()
     image_name = input('Insert a name for your instance: ')
-    clear_terminal()
+    general_functs.clear_terminal()
     security_group_name = input('(optional) give the name to a security group you wish to associate your instance with: ')
     if security_group_name == "":
         security_group_name = f"{image_name}-sg"
@@ -59,12 +60,12 @@ def create_instance():
         auto_create_security_group_rule(security_group_name)
         auto_create_security_group_rule(security_group_name, type="egress", from_port=0, to_port=0, protocol="-1")
     inst = classes.instance(image_id=image_id, host_type=type, image_name=image_name, security_group_name=security_group_name)
-    add_to_infr('instance_vars', inst, image_name)
+    general_functs.add_to_infr('instance_vars', inst, image_name)
     print(f'Instance {image_name} sucessfully added to the configuration file!')
     time.sleep(1)
 
 def create_security_group():
-    clear_terminal()
+    general_functs.clear_terminal()
     name = input('Insert a name for your security group: ')
     auto_create_security_group(name)
     create_security_group_rule(name=name)
@@ -73,13 +74,13 @@ def create_security_group():
 
 
 def create_security_group_rule(name = ""):
-    clear_terminal()
+    general_functs.clear_terminal()
     if name == "":
         name = input('Insert the name of the security group you would like to add a rule to: ')
-    clear_terminal()
+    general_functs.clear_terminal()
     add_rule = input('Would you like to add a rule to your security group y/n: ')
     while(add_rule.lower() == 'y'):
-        clear_terminal()        
+        general_functs.clear_terminal()        
         rule_type = input("What type of rule is this? (ingress/egress): ")
         rule_from_port = int(input("From which port should this rule apply? "))
         rule_to_port = int(input('To which port should this rule apply? '))
@@ -99,38 +100,38 @@ def create_security_group_rule(name = ""):
 
 def auto_create_security_group(name):
     sg = classes.security_group(name=name)
-    add_to_infr('security_group_vars', sg, sg.name)
+    general_functs.add_to_infr('security_group_vars', sg, sg.name)
 
 def auto_create_security_group_rule(security_group_name, type = "ingress", from_port = 22, to_port = 22, protocol = "tcp", cidr_blocks = ['0.0.0.0/0'], ipv6_cidr_blocks = []):
     sg_rule = classes.security_group_rule(type=type, from_port=from_port, to_port=to_port, protocol=protocol, cidr_blocks=cidr_blocks, ipv6_cidr_blocks=ipv6_cidr_blocks, security_group_name=security_group_name)
     key_name = f'{security_group_name}-{type}-rule-port-{from_port}'
-    add_to_infr('security_group_rule_vars', sg_rule, key_name)
+    general_functs.add_to_infr('security_group_rule_vars', sg_rule, key_name)
 
 def create_user():
-    clear_terminal()
+    general_functs.clear_terminal()
     name = input('Insert user name: ')
-    clear_terminal()
+    general_functs.clear_terminal()
     reset_password_query = input('Would you like for the user to have to reset his password on first login? (y/n) ').lower()
     if reset_password_query == 'y':
         reset_password = True
     elif reset_password_query == 'n':
         reset_password = False
-    clear_terminal()
+    general_functs.clear_terminal()
     print('''
     1: admin
     2: read_only
     ''')
     user_permissions = int(input("Select the level of permissions you would like the user to have: "))
-    user_policy = user_policies[user_permissions-1]
+    user_policy = globals.user_policies[user_permissions-1]
 
     user = classes.user(name=name, reset_password=reset_password, user_policy=user_policy)
-    add_to_infr('user_vars', user, user.name)
+    general_functs.add_to_infr('user_vars', user, user.name)
     print(f'User {name} sucessfully added to the configuration file!')
     time.sleep(1)
 
 def create_high_availability():
-    infr = read_json()
+    infr = general_functs.read_json()
     infr['create_HA_infrastructure'] = True
-    write_json(infr)
+    general_functs.write_json(infr)
     print(f'high_availability setting sucessfully added to the configuration file!')
     time.sleep(1)
