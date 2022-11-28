@@ -57,6 +57,6 @@ $ python3 projeto.py
 ```
 Pronto! Agora é só seguir os menus para construir sua infraestrutura.  
 
-## Manual do usuário
+## Roteiro do Projeto
 
-Se encontra neste [site](), também contém um tutorial do **Terraform**
+Se encontra neste [site](https://bert799.github.io/roteiro-proj-CompNuvem/), também contém um tutorial do **Terraform**
