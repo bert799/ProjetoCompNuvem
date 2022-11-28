@@ -43,3 +43,7 @@ variable "security_group_rule_vars"{
 variable "create_HA_infrastructure" {
   type = bool
 }
+
+variable "HA_ssh_key" {
+  type = string
+}

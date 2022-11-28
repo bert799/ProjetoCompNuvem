@@ -136,7 +136,9 @@ def create_user():
 
 def create_high_availability():
     infr = general_functs.read_json()
+    key_pair = input("Insert key pair for HA instances: ")
     infr['create_HA_infrastructure'] = True
+    infr['HA_ssh_key'] = key_pair
     general_functs.write_json(infr)
     print(f'high_availability setting sucessfully added to the configuration file!')
     time.sleep(1)

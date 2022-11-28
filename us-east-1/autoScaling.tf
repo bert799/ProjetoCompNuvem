@@ -4,7 +4,7 @@ resource "aws_launch_configuration" "web_service" {
   image_id        = "ami-0e291adf79e91660a"
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.web_service_instance[count.index].id]
-  key_name = "bernardo"
+  key_name = var.HA_ssh_key
 
   lifecycle {
     create_before_destroy = true
