@@ -1,62 +1,66 @@
-# ProjetoCompNuvem
+# Cloud Computing Project
 
-### Autor: Bernardo Cunha Capoferri
-### Curso: Engenharia da computação
-### Ano: 2022
+### Author: Bernardo Cunha Capoferri
+### Course: Engenharia da computação
+### year: 2022
 <br/>
 
-## Descrição
-Este é um program de **CLI** simples codado em **Python** para poder criar uma infraestrutura utilizando a linguagem *IaC* **Terraform** na *Amazon Web Service* (AWS). seu objetivo foi simplificar o processo de criação e apagar de instância, grupos de segurança e suas regras, Usuários e sistema de alta disponibilidade em duas regiões da AWS *us-east-1* e *us-east-2*  usando o **Terraform**.
+## Description
+This is a simple **CLI** program coded using **Python** to create an *Amazon Web Service* (AWS) infrastructure using the *Infrastructure as Code* (IaC) language **Terraform**. It's objective was to simplify the process of Creating and deleting:
+- EC2 instances
+- security groups and their rules.
+- IAM Users
+- High-Availability systems
 
+In two AWS regions *us-east-1* and *us-east-2*
 <br/>
 
-## Requerimentos
+## Rquirements
 
 <br/>
 
 ### OS:
-O programa foi codado e testado no sistema operacional **Ubuntu 22.04.1**, é recomendado que use um distribuição de Linux para trabalhar com este código.
-
+The program was coded and tested on **Ubuntu 22.04.1**, it's recommended to use a Linux OS with this code.
 <br/>
 
 ### Terraform:
-É preciso que o programa de *Infrastructure as Code* (IaC) **Terraform** versão 1.3.5 ou acima esteja instalado em seu sistema. 
+It is necessary that the IaC **Terraform** version 1.3.5 or above be installed in your system.
 
-Para instalar siga o [tutorial](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) no site da HashiCorp
-
+To install it, follow the [tutorial](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) in HashiCorp's website.
 <br/>
 
 ### Python:
-É recomendado que esteja instalada a versão 3.10.6 ou acima.
+It's reccommended that version 3.10.6 or above be installed.
 
 <br/>
 
-## Configurando variáveis de ambiente no Linux
-Para que o **Terraform** consiga realizar alterações na sua AWS é necessário que sejam inseridas suas
-chaves de acesso que você obteve quando criou um usuário com permissões de gerar recursos. Existem duas opções para este programa, a primeira é colocar estas variáveis no seu ambiente local, rodando os seguintes comandos em seu terminal:  
+## Configuring enviroment variables in Linux
+**Terraform** requires access keys to authorize it to realize alteration in your AWS cloud, they are obtained when creating a user with resource creation permissions. There exists two options to give terraform this information:
+- Put the keys in your local enviroment by running the following commands in your terminal:
 ```sh
 $ export AWS_ACCESS_KEY_ID= <SUA_ACCESS_KEY>
 $ export AWS_SECRET_ACCESS_KEY= <SUA_SECRET_ACCESS_KEY>
 ```
-Leve em conta que neste caso as variáveis são definidas apenas na sessão atual, ou seja para toda nova instância de terminal estes comandos deverão ser rodados. A opção mais permanente consiste em colocar estes dois comandos no arquivo `.bashrc` e em seguida rodar o seguinte comando para atualizar o terminal aberto:
+Be aware that this is a temporary measure and will only be available in the current session.
+
+- A more permanent option puts the previous commands in the `.bashrc` file and running the following command to update the open terminal:
 ```sh
 $ source ~/.bashrc
 ```
 <br>
 
-## Como Rodar o código
-Primeiramente clone o repositório para seu sistema local.  
+## How to run the code
+First, clone the repository
 ```sh
 $ git clone git@github.com:bert799/ProjetoCompNuvem.git # Clone com SSH (recomendado)
 $ git clone https://github.com/bert799/ProjetoCompNuvem # Clone com HTTPS
 ```
-Com o terminal aberto entre na pasta `python/`  
-Rode a aplicação com o seguinte comando:
+With your terminal open enter the folder `python/` and run the following command:
 ```sh
 $ python3 projeto.py
 ```
-Pronto! Agora é só seguir os menus para construir sua infraestrutura.  
+All done! Now all you need to do is follow the CLI menus to construct your infrastructure.  
 
-## Roteiro do Projeto
+## Project guide (Portuguse-BR)
 
-Se encontra neste [site](https://bert799.github.io/roteiro-proj-CompNuvem/), também contém um tutorial do **Terraform**
+Can be found on this link [site](https://bert799.github.io/roteiro-proj-CompNuvem/), also contains a **Terraform** tutorial
